@@ -35,9 +35,9 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'default-secret-key')  # Usa la clave por d
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost').split(',')
 
 
 # Application definition
@@ -127,8 +127,8 @@ DATABASES = {
         'NAME': os.getenv('MYSQL_DATABASE', 'laboratorio_db'),
         'USER': os.getenv('MYSQL_USER', 'user'),
         'PASSWORD': os.getenv('MYSQL_PASSWORD', 'password'),
-        'HOST': os.getenv('DB_HOST', 'db'),
-        'PORT': os.getenv('DB_PORT', '3306'),
+        'HOST': os.getenv('MYSQL_HOST'),
+        'PORT': os.getenv('MYSQL_PORT', '3306'),
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
         },
@@ -172,6 +172,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = 'static/'
 
 # Default primary key field type
@@ -179,11 +180,11 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Configuración de Amazon SES
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'email-smtp.us-east-1.amazonaws.com'  # Asegúrate de usar la región correcta para SES
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.getenv('AWS_SES_ACCESS_KEY_ID')  # Clave de acceso IAM (SES)
-EMAIL_HOST_PASSWORD = os.getenv('AWS_SES_SECRET_ACCESS_KEY')  # Clave secreta IAM (SES)
-DEFAULT_FROM_EMAIL = 'santiagohmo77@gmail.com'  # El correo verificado que usarás como remitente
+# # Configuración de Amazon SES
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'email-smtp.us-east-1.amazonaws.com'  # Asegúrate de usar la región correcta para SES
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = os.getenv('AWS_SES_ACCESS_KEY_ID')  # Clave de acceso IAM (SES)
+# EMAIL_HOST_PASSWORD = os.getenv('AWS_SES_SECRET_ACCESS_KEY')  # Clave secreta IAM (SES)
+# DEFAULT_FROM_EMAIL = 'santiagohmo77@gmail.com'  # El correo verificado que usarás como remitente
