@@ -69,10 +69,10 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',  # Permitir solicitudes desde React
+    'https://codingwthisa.github.io'
 ]
 from corsheaders.defaults import default_headers
 
-CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_HEADERS = list(default_headers) + [
     'access-control-allow-origin',
 ]
