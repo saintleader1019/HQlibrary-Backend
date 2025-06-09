@@ -1,0 +1,64 @@
+services:
+  db:
+    image: mysql:latest
+    container_name: mysql_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: laboratorio
+      MYSQL_DATABASE: laboratorio_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3307:3306"
+    volumes:
+      - 5e483fbb7b655ed758ebdcb6753ce01212307b4de1089b7b5d4d9e81373aee0b:/var/lib/mysql
+    networks:
+      - my_network
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: laboratorio
+    ports:
+      - "8081:80"
+    networks:
+      - my_network
+
+  django:
+    build:
+      context: ./HQlibrary_Backend
+    container_name: django_app
+    command: >
+      sh -c "while ! nc -z db 3306; do sleep 1; done && python manage.py runserver 0.0.0.0:8000"
+    env_file:
+      - ./HQlibrary_Backend/.env
+    volumes:
+      - ./HQlibrary_Backend:/app
+      - ./HQlibrary_Backend/media:/app/media
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    networks:
+      - my_network
+
+  frontend:
+    build:
+      context: ./mi-proyecto
+    container_name: react_frontend
+    ports:
+      - "3000:3000"
+    networks:
+      - my_network
+
+networks:
+  my_network:
+    driver: bridge
+
+volumes:
+  5e483fbb7b655ed758ebdcb6753ce01212307b4de1089b7b5d4d9e81373aee0b:
+    external: true
